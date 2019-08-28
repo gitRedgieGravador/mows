@@ -1,41 +1,51 @@
-// basic functionalities
-client = mqtt.connect("ws://broker.hivemq.com:8000/mqtt")
-client.subscribe("mqtt/demo")
+$(document).ready(function () {
+	var rownum = 0;
+	$("#btnConnect").click(function(){
+		let address = $("#brokerAddress").val()
+		client = mqtt.connect(address)
+		
+		$("#status").val("Connecting.....")
 
-client.on("connect", function(){
-    console.log("Successfully connected");
-})
+		client.on("connect", function(){
+			$("#status").val("Successfully connected!");
+		    console.log("Successfully connected");
+		})
 
-client.on("message", function (topic, payload) {
-  console.log([topic, payload].join(": "));
-  client.end();
-})
+		client.on("message", function (topic, payload) {
+		  	console.log([topic, payload].join(": "));
+		  	let getTopic = topic.toString().slice(7);
+		  	//console.log("lalal :" + getTopic.slice(7));
+		  	var stamp = new Date($.now());
+		  	let parent = $("#tbodyContainer");
+			let row = $("<tr></tr>");
+			let top = $("<th></th>").text(getTopic);
+			let payld = $("<td></td>").text(payload);
+			let time = $("<td></td>").text(stamp.toString().slice(0,24));
 
-client.publish("mqtt/demo", "hello world!")
+			top.attr("scope", "row");
+			row.attr("id", rownum);
 
-// // advance functionalities
-// client = mqtt.connect("ws://broker.hivemq.com:8000/mqtt")
-// client.subscribe("mqtt/demo", function (err){
-//   if (err){
-//     console.log(err);
-//   } else {
-//     console.log("subscribed")
-//   }
-// })
+			parent.append(row);
+			$("#" + rownum).append(top, payld, time);
+			rownum += 1;
+		})
 
-// client.on("connect", function(){
-//     console.log("Successfully connected");
-// })
+		
+	});
 
-// client.on("message", function (topic, payload) {
-//   console.log([topic, payload].join(": "));
-//   client.end();
-// })
+	$("#btnSubscribe").click(function(){
+		let topicSubs = "redgie/" + $("#topicToSubscribe").val();
+		client.subscribe(topicSubs);
+		console.log("btnSubscribe is click " + topicSubs);
+	});
 
-// client.publish("mqtt/demo", "hello world!", function(err){
-//   if (err){
-//     console.log(err)
-//   } else {
-//     console.log("published")
-//   }
-// })
+	$("#btnPublish").click(function(){
+		let top = "redgie/" + $("#topicToPublish").val();
+		let payld = $("#payloadToPublish").val();
+		client.publish(top, payld);
+		console.log("btnPublish is click " + top);
+	});
+});
+
+
+
