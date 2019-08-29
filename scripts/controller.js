@@ -11,7 +11,7 @@ $(document).ready(function () {
 		})
 
 		client.on("message", function (topic, payload) {
-			let getTopic = topic.toString().slice(7);
+			let getTopic = topic.toString().slice(5);
 			var stamp = new Date($.now());
 			let parent = $("#tbodyContainer");
 			let row = $("<tr></tr>");
@@ -36,18 +36,18 @@ $(document).ready(function () {
 	});
 
 	$("#btnSubscribe").click(function () {
-		let topicSubs = "redgie/" + $("#topicToSubscribe").val();
+		let topicSubs = "mqtt/" + $("#topicToSubscribe").val();
 		client.subscribe(topicSubs);
 	});
 
 	$("#btnPublish").click(function () {
-		let top = "redgie/" + $("#topicToPublish").val();
+		let top = "mqtt/" + $("#topicToPublish").val();
 		let payld = $("#payloadToPublish").val();
 		client.publish(top, payld);
 	});
 
 	$("#btnUnsubscribe").click(function () {
-		let topicSubs = "redgie/" + $("#topicToSubscribe").val();
+		let topicSubs = "mqtt/" + $("#topicToSubscribe").val();
 		client.unsubscribe(topicSubs);
 	});
 });
