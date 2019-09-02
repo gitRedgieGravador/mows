@@ -22,6 +22,7 @@
 		padding: 10px;
 		box-shadow: 5px 10px #888888;
 		border-radius: 5%;
+		height: 300px;
 	}
 
 	#divSubscribe {
@@ -33,6 +34,7 @@
 		padding: 10px;
 		box-shadow: 5px 10px #888888;
 		border-radius: 5%;
+		height: 300px;
 	}
 
 	#divPublish {
@@ -44,6 +46,7 @@
 		padding: 10px;
 		box-shadow: 5px 10px #888888;
 		border-radius: 5%;
+		height: 300px;
 	}
 
 	#messages {
@@ -114,6 +117,14 @@
 
 	.small-col{flex-basis:10%;}
 
+	fieldset {
+		margin-left: 10%;
+	}
+
+	#status {
+		color: red;
+	}
+
 </style>
 
 <body>
@@ -131,13 +142,17 @@
 			</form>
 			<button id="btnConnect" class="btn btn-success">Connect</button>
 			<button id="btnDisconnect" class="btn btn-danger">Disconnect</button>
-			<form>
-				<div class="form-group">
-					<br>
-					<label for="status">Status</label>
-					<input type="text" class="form-control" id="status" value="Disconnected" disabled="">
-				</div>
-			</form>
+			<div>
+				<br>
+				<fieldset>
+					<legend>Status:</legend>
+					<center>
+						<i>
+							<h4 id="status">Disconnected</h4>
+						</i>
+					</center>
+				</fieldset>
+			</div>
 		</div>
 
 		<div id="divPublish">
@@ -154,7 +169,7 @@
 					<input type="text" class="form-control" id="payloadToPublish" value="">
 				</div>
 			</form>
-			<button id="btnPublish" class="btn btn-success">Publish</button>
+			<button id="btnPublish" class="btn btn-success btn-block">Publish</button>
 		</div>
 
 		<div id="divSubscribe">
