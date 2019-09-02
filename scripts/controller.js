@@ -4,11 +4,14 @@ $(document).ready(function () {
 		let address = $("#brokerAddress").val()
 		client = mqtt.connect(address)
 
-		$("#status").val("Connecting.....")
+		$("#status").text("Connecting.....")
+		$("#status").css("color", "rgb(230, 230, 0)")
 
 		client.on("connect", function () {
-			$("#status").val("Successfully connected!");
-		})
+			$("#status").css("color", "green")
+			$("#status").text("Successfully connected!");
+
+		});
 
 		client.on("message", function (topic, payload) {
 			let getTopic = topic.toString().slice(5);
@@ -25,13 +28,14 @@ $(document).ready(function () {
 			parent.append(row);
 			$("#" + rownum).append(top, payld, time);
 			rownum += 1;
-		})
+		});
 
 
 	});
 
 	$("#btnDisconnect").click(function () {
-		$("#status").val("Disconnected!")
+		$("#status").css("color", "red")
+		$("#status").text("Disconnected!")
 		client.end();
 	});
 
