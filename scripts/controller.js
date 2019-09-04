@@ -1,5 +1,6 @@
 $(document).ready(function () {
-	var rownum = 0;
+	$("button").attr("disabled", true)
+	$("#btnConnect").attr("disabled", false)
 	$("#btnConnect").click(function () {
 		let address = $("#brokerAddress").val()
 		client = mqtt.connect(address)
@@ -8,6 +9,7 @@ $(document).ready(function () {
 		$("#status").css("color", "rgb(230, 230, 0)")
 
 		client.on("connect", function () {
+			$("button").attr("disabled", false)
 			$("#status").css("color", "green")
 			$("#status").text("Successfully connected!");
 
@@ -16,26 +18,15 @@ $(document).ready(function () {
 		client.on("message", function (topic, payload) {
 			let getTopic = topic.toString().slice(5);
 			var stamp = new Date($.now());
-			let parent = $("#tbodyContainer");
-			let row = $("<tr></tr>");
-			let top = $("<th></th>").text(getTopic);
-			let payld = $("<td></td>").text(payload);
-			let time = $("<td></td>").text(stamp.toString().slice(0, 24));
-
-			top.attr("scope", "row");
-			row.attr("id", rownum);
-
-			parent.append(row);
-			$("#" + rownum).append(top, payld, time);
-			rownum += 1;
+			$("#tbodyContainer").append($("<tr><th>"+ getTopic +"</th><td>"+ payload + "</td><td>" + stamp.toString().slice(0, 24) + "</td></tr>"));
 		});
-
-
 	});
 
 	$("#btnDisconnect").click(function () {
 		$("#status").css("color", "red")
 		$("#status").text("Disconnected!")
+		$("button").attr("disabled", true)
+		$("#btnConnect").attr("disabled", false)
 		client.end();
 	});
 
@@ -45,16 +36,10 @@ $(document).ready(function () {
 	});
 
 	$("#btnPublish").click(function () {
-		let top = "mqtt/" + $("#topicToPublish").val();
-		let payld = $("#payloadToPublish").val();
-		client.publish(top, payld);
+		client.publish("mqtt/" + $("#topicToPublish").val(), $("#payloadToPublish").val());
 	});
 
 	$("#btnUnsubscribe").click(function () {
-		let topicSubs = "mqtt/" + $("#topicToSubscribe").val();
-		client.unsubscribe(topicSubs);
+		client.unsubscribe("mqtt/" + $("#topicToSubscribe").val());
 	});
 });
-
-
-
