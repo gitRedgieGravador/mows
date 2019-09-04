@@ -1,4 +1,5 @@
 $(document).ready(function () {
+	var num = 1;
 	$("button").attr("disabled", true)
 	$("#btnConnect").attr("disabled", false)
 	$("input").attr("disabled", true)
@@ -15,9 +16,11 @@ $(document).ready(function () {
 			$("#status").text("Successfully connected!");
 		});
 		client.on("message", function (topic, payload) {
-			let getTopic = topic.toString().slice(5);
 			var stamp = new Date($.now());
-			$("#tbodyContainer").append($("<tr><th>" + getTopic + "</th><td>" + payload + "</td><td>" + stamp.toString().slice(0, 24) + "</td></tr>"));
+			console.log("message");
+			let idn = "#tbodyContainer .content" + num;
+			num += 1;
+			$(idn).before($("<tr class="+"content"+num+"><th>" + topic + "</th><td>" + payload + "</td><td>" + stamp.toString().slice(0, 24) + "</td></tr>"));			
 		});
 	});
 	$("#btnDisconnect").click(function () {
@@ -28,15 +31,14 @@ $(document).ready(function () {
 		$("#btnConnect").attr("disabled", false)
 		$("input").attr("disabled", true)
 		$("#brokerAddress").attr("disabled", false)
-	});
+	});	
 	$("#btnSubscribe").click(function () {
-		let topicSubs = "mqtt/" + $("#topicToSubscribe").val();
-		client.subscribe(topicSubs);
+		client.subscribe($("#topicToSubscribe").val());
 	});
 	$("#btnPublish").click(function () {
-		client.publish("mqtt/" + $("#topicToPublish").val(), $("#payloadToPublish").val());
+		client.publish($("#topicToPublish").val(), $("#payloadToPublish").val());
 	});
 	$("#btnUnsubscribe").click(function () {
-		client.unsubscribe("mqtt/" + $("#topicToSubscribe").val());
+		client.unsubscribe($("#topicToSubscribe").val());
 	});
 });
